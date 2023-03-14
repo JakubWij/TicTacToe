@@ -66,30 +66,31 @@ class Game(Board):
         self.winner = None
 
     def player_move(self):
-        try:
-            print(f"It is the turn of player {self.current_player}")
-            row, col = map(int, input("Enter row and column numbers with a space between to fix spot: ").split())
-        except ValueError:
-            print("You should enter two numbers!")
-        else:
-            if row < 1 or row > 3 or col < 1 or col > 3:
-                print('Coordinates should be between 1-3!')
-            elif self.check_occupied_cell(col - 1, row - 1):
-                print("This cell is occupied! Choose another one!")
+        while True:
+            try:
+                print(f"It is the turn of player {self.current_player}")
+                row, col = map(int, input("Enter row and column numbers with a space between to fix spot: ").split())
+            except ValueError:
+                print("You should enter two numbers!")
             else:
-                self.board[row - 1][col - 1] = self.current_player
-                self.swap_player()
+                if row < 1 or row > 3 or col < 1 or col > 3:
+                    print('Coordinates should be between 1-3!')
+                elif self.check_occupied_cell(col - 1, row - 1):
+                    print("This cell is occupied! Choose another one!")
+                else:
+                    self.board[row - 1][col - 1] = self.current_player
+                    break
 
     def swap_player(self):
         self.current_player, self.other_player = self.other_player, self.current_player
 
     def check_win(self):
-        players = [self.current_player, self.other_player]
-        for player in players:
-            if self.check_vertical(player) or self.check_horizontal(player) or self.check_diagonal(player):
-                self.winner = player
-                return True
-        return False
+        if self.check_vertical(self.current_player) or self.check_horizontal(self.current_player)\
+                or self.check_diagonal(self.current_player):
+            self.winner = self.current_player
+            return True
+        else:
+            return False
 
 
 def play_game():
@@ -97,14 +98,17 @@ def play_game():
     game = Game()
     while True:
         game.show_board()
+        game.player_move()
+        game.show_board()
         if game.check_full_board():
             print('Draw')
             break
-        elif game.check_win():
+        if not game.check_win():
+            game.swap_player()
+        else:
             print(f'Game is over!!! The winner is whoever played {game.winner}! Thanks for playing!')
             break
-        else:
-            game.player_move()
+
 
     play_again = input('Do you want to play again? (y/n)').lower()
     while play_again not in ['y', 'n']:
