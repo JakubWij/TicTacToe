@@ -85,7 +85,7 @@ class Game(Board):
         self.current_player, self.other_player = self.other_player, self.current_player
 
     def check_win(self):
-        if self.check_vertical(self.current_player) or self.check_horizontal(self.current_player)\
+        if self.check_vertical(self.current_player) or self.check_horizontal(self.current_player) \
                 or self.check_diagonal(self.current_player):
             self.winner = self.current_player
             return True
@@ -108,7 +108,6 @@ def play_game():
         else:
             print(f'Game is over!!! The winner is whoever played {game.winner}! Thanks for playing!')
             break
-
 
     play_again = input('Do you want to play again? (y/n)').lower()
     while play_again not in ['y', 'n']:
