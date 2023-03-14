@@ -93,19 +93,18 @@ class Game(Board):
 
 
 def play_game():
-    game_is_on = True
     welcome_statement()
     game = Game()
-    while game_is_on:
+    while True:
         game.show_board()
         if game.check_full_board():
-            game_is_on = False
             print('Draw')
-        elif not game.check_win():
-            game.player_move()
-        else:
-            game_is_on = False
+            break
+        elif game.check_win():
             print(f'Game is over!!! The winner is whoever played {game.winner}! Thanks for playing!')
+            break
+        else:
+            game.player_move()
 
     play_again = input('Do you want to play again? (y/n)').lower()
     while play_again not in ['y', 'n']:
