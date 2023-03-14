@@ -31,14 +31,14 @@ class Board:
         else:
             return False
 
-    def check_diagonal(self, player):
+    def check_vertical(self, player):
         for i in range(3):
             if self.board[0][i] == self.board[1][i] == self.board[2][i] == player:
                 return True
         else:
             return False
 
-    def check_vertical(self, player):
+    def check_diagonal(self, player):
         if self.board[0][0] == self.board[1][1] == self.board[2][2] == player:
             return True
         if self.board[0][2] == self.board[1][1] == self.board[2][0] == player:
@@ -47,7 +47,7 @@ class Board:
             return False
 
     def check_full_board(self):
-        # it any returns False game is still going other way True
+        # if returns False game is still going other way True
         if any(' ' in short_list for short_list in self.board):
             return False
         else:
@@ -67,7 +67,7 @@ class Game(Board):
 
     def player_move(self):
         try:
-            print(f"It's player {self.current_player} move")
+            print(f"It is the turn of player {self.current_player}")
             row, col = map(int, input("Enter row and column numbers with a space between to fix spot: ").split())
         except ValueError:
             print("You should enter two numbers!")
@@ -84,16 +84,12 @@ class Game(Board):
         self.current_player, self.other_player = self.other_player, self.current_player
 
     def check_win(self):
-        if self.check_vertical(self.current_player) or self.check_horizontal(self.current_player) \
-                or self.check_diagonal(self.current_player):
-            self.winner = self.current_player
-            return True
-        elif self.check_vertical(self.other_player) or self.check_horizontal(
-                self.other_player) or self.check_diagonal(self.other_player):
-            self.winner = self.other_player
-            return True
-        else:
-            return False
+        players = [self.current_player, self.other_player]
+        for player in players:
+            if self.check_vertical(player) or self.check_horizontal(player) or self.check_diagonal(player):
+                self.winner = player
+                return True
+        return False
 
 
 def play_game():
@@ -101,15 +97,13 @@ def play_game():
     welcome_statement()
     game = Game()
     while game_is_on:
+        game.show_board()
         if game.check_full_board():
-            game.show_board()
             game_is_on = False
             print('Draw')
         elif not game.check_win():
-            game.show_board()
             game.player_move()
         else:
-            game.show_board()
             game_is_on = False
             print(f'Game is over!!! The winner is whoever played {game.winner}! Thanks for playing!')
 
@@ -122,5 +116,5 @@ def play_game():
     else:
         print('Thanks for playing!')
 
-play_game()
 
+play_game()
