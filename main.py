@@ -99,13 +99,14 @@ def play_game():
     while True:
         game.show_board()
         game.player_move()
-        game.show_board()
         if game.check_full_board():
             print('Draw')
+            game.show_board()
             break
         if not game.check_win():
             game.swap_player()
         else:
+            game.show_board()
             print(f'Game is over!!! The winner is whoever played {game.winner}! Thanks for playing!')
             break
 
